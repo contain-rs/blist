@@ -10,9 +10,6 @@
 
 //! A deque implemented as a hybrid linked-list-of-arrays
 
-#![feature(box_syntax)]
-#![feature(unsafe_destructor)]
-#![feature(box_patterns)]
 #![feature(core)]
 
 #![cfg_attr(test, feature(test, hash))]
@@ -26,7 +23,6 @@ use std::collections::{vec_deque, VecDeque};
 use std::iter::{self, IntoIterator};
 use std::fmt;
 use std::hash::{Hash, Hasher};
-use std::num::Int;
 use traverse::Traversal;
 use linked_list::LinkedList;
 
@@ -541,20 +537,20 @@ mod tests {
         assert_eq!(m.pop_front(), None);
         assert_eq!(m.pop_back(), None);
         assert_eq!(m.pop_front(), None);
-        m.push_front(box 1);
-        assert_eq!(m.pop_front(), Some(box 1));
-        m.push_back(box 2);
-        m.push_back(box 3);
+        m.push_front(1);
+        assert_eq!(m.pop_front(), Some(1));
+        m.push_back(2);
+        m.push_back(3);
         assert_eq!(m.len(), 2);
-        assert_eq!(m.pop_front(), Some(box 2));
-        assert_eq!(m.pop_front(), Some(box 3));
+        assert_eq!(m.pop_front(), Some(2));
+        assert_eq!(m.pop_front(), Some(3));
         assert_eq!(m.len(), 0);
         assert_eq!(m.pop_front(), None);
-        m.push_back(box 1);
-        m.push_back(box 3);
-        m.push_back(box 5);
-        m.push_back(box 7);
-        assert_eq!(m.pop_front(), Some(box 1));
+        m.push_back(1);
+        m.push_back(3);
+        m.push_back(5);
+        m.push_back(7);
+        assert_eq!(m.pop_front(), Some(1));
 
         let mut n = BList::new();
         n.push_front(2);
