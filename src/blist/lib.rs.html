@@ -911,10 +911,6 @@
 <span id="869">869</span>
 <span id="870">870</span>
 <span id="871">871</span>
-<span id="872">872</span>
-<span id="873">873</span>
-<span id="874">874</span>
-<span id="875">875</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2015 The Rust Project Developers. See the COPYRIGHT</span>
 <span class='comment'>// file at the top-level directory of this distribution and at</span>
@@ -928,9 +924,6 @@
 
 <span class='doccomment'>//! A deque implemented as a hybrid linked-list-of-arrays</span>
 
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>box_syntax</span>)]</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>unsafe_destructor</span>)]</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>box_patterns</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>core</span>)]</span>
 
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>cfg_attr</span>(<span class='ident'>test</span>, <span class='ident'>feature</span>(<span class='ident'>test</span>, <span class='ident'>hash</span>))]</span>
@@ -944,7 +937,6 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>iter</span>::{<span class='self'>self</span>, <span class='ident'>IntoIterator</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>hash</span>::{<span class='ident'>Hash</span>, <span class='ident'>Hasher</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>num</span>::<span class='ident'>Int</span>;
 <span class='kw'>use</span> <span class='ident'>traverse</span>::<span class='ident'>Traversal</span>;
 <span class='kw'>use</span> <span class='ident'>linked_list</span>::<span class='ident'>LinkedList</span>;
 
@@ -1459,20 +1451,20 @@
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>None</span>);
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_back</span>(), <span class='prelude-val'>None</span>);
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>None</span>);
-        <span class='ident'>m</span>.<span class='ident'>push_front</span>(<span class='kw'>box</span> <span class='number'>1</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>Some</span>(<span class='kw'>box</span> <span class='number'>1</span>));
-        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='kw'>box</span> <span class='number'>2</span>);
-        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='kw'>box</span> <span class='number'>3</span>);
+        <span class='ident'>m</span>.<span class='ident'>push_front</span>(<span class='number'>1</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>Some</span>(<span class='number'>1</span>));
+        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='number'>2</span>);
+        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='number'>3</span>);
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>len</span>(), <span class='number'>2</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>Some</span>(<span class='kw'>box</span> <span class='number'>2</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>Some</span>(<span class='kw'>box</span> <span class='number'>3</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>Some</span>(<span class='number'>2</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>Some</span>(<span class='number'>3</span>));
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>len</span>(), <span class='number'>0</span>);
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>None</span>);
-        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='kw'>box</span> <span class='number'>1</span>);
-        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='kw'>box</span> <span class='number'>3</span>);
-        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='kw'>box</span> <span class='number'>5</span>);
-        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='kw'>box</span> <span class='number'>7</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>Some</span>(<span class='kw'>box</span> <span class='number'>1</span>));
+        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='number'>1</span>);
+        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='number'>3</span>);
+        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='number'>5</span>);
+        <span class='ident'>m</span>.<span class='ident'>push_back</span>(<span class='number'>7</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>pop_front</span>(), <span class='prelude-val'>Some</span>(<span class='number'>1</span>));
 
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>n</span> <span class='op'>=</span> <span class='ident'>BList</span>::<span class='ident'>new</span>();
         <span class='ident'>n</span>.<span class='ident'>push_front</span>(<span class='number'>2</span>);
