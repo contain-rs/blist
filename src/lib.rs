@@ -797,6 +797,7 @@ mod tests {
 
 #[cfg(all(test, feature = "nightly"))]
 mod bench{
+    use test;
     use super::BList;
     use traverse::Traversal;
 
