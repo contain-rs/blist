@@ -17,3 +17,6 @@ readme = "README.md"
 [dependencies]
 traverse = "*"
 linked-list = "*"
+
+[features]
+nightly = []

@@ -10,13 +10,11 @@
 
 //! A deque implemented as a hybrid linked-list-of-arrays
 
-#![feature(core)]
-
-#![cfg_attr(test, feature(test, hash))]
+#![cfg_attr(all(test, feature = "nightly"), feature(test))]
+#[cfg(all(test, feature = "nightly"))] extern crate test;
 
 extern crate linked_list;
 extern crate traverse;
-#[cfg(test)] extern crate test;
 
 use std::cmp::Ordering;
 use std::collections::{vec_deque, VecDeque};
@@ -468,29 +466,49 @@ impl<A> Extend<A> for BList<A> {
 }
 
 impl<A: PartialEq> PartialEq for BList<A> {
-    fn eq(&self, other: &BList<A>) -> bool {
-        self.len() == other.len() &&
-            iter::order::eq(self.iter(), other.iter())
-    }
-
-    fn ne(&self, other: &BList<A>) -> bool {
-        self.len() != other.len() ||
-            iter::order::ne(self.iter(), other.iter())
+    fn eq(&self, other: &Self) -> bool {
+        if self.len() == other.len() {
+            let mut a = self.iter();
+            let mut b = other.iter();
+            loop {
+                match (a.next(), b.next()) {
+                    (Some(x), Some(y)) => if x != y {
+                        return false;
+                    },
+                    (None, None) => return true,
+                    _ => return false
+                }
+            }
+        } else {
+            false
+        }
     }
 }
 
 impl<A: Eq> Eq for BList<A> {}
 
 impl<A: PartialOrd> PartialOrd for BList<A> {
-    fn partial_cmp(&self, other: &BList<A>) -> Option<Ordering> {
-        iter::order::partial_cmp(self.iter(), other.iter())
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        let mut a = self.iter();
+        let mut b = other.iter();
+        loop {
+            match (a.next(), b.next()) {
+                (Some(x), Some(y)) => match x.partial_cmp(&y) {
+                    Some(Ordering::Equal) => {}
+                    otherwise => return otherwise,
+                },
+                (None, None) => return Some(Ordering::Equal),
+                (None, _) => return Some(Ordering::Less),
+                (_, None) => return Some(Ordering::Greater),
+            }
+        }
     }
 }
 
 impl<A: Ord> Ord for BList<A> {
     #[inline]
-    fn cmp(&self, other: &BList<A>) -> Ordering {
-        iter::order::cmp(self.iter(), other.iter())
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.partial_cmp(other).unwrap()
     }
 }
 
@@ -521,7 +539,6 @@ impl<A: Hash> Hash for BList<A> {
 #[cfg(test)]
 mod tests {
     use super::BList;
-    use std::hash;
 
     fn generate_test() -> BList<i32> {
         list_from(&[0,1,2,3,4,5,6])
@@ -675,7 +692,7 @@ mod tests {
         let m = list_from(&[1,2,3]);
         assert!(n != m);
     }
-
+/* unstable
     #[test]
     fn test_hash() {
       let mut x = BList::new();
@@ -693,7 +710,7 @@ mod tests {
 
       assert!(hash::hash::<_, hash::SipHasher>(&x) == hash::hash::<_, hash::SipHasher>(&y));
     }
-
+*/
     #[test]
     fn test_ord() {
         let n = list_from(&[]);
@@ -778,10 +795,9 @@ mod tests {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "nightly"))]
 mod bench{
     use super::BList;
-    use test;
     use traverse::Traversal;
 
     #[bench]
